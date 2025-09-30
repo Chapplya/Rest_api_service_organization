@@ -2,9 +2,7 @@ from sqlalchemy.orm import Session
 from database import models
 
 
-def create_test_organization(
-    db: Session, name: str = "Test Organization"
-):
+def create_test_organization(db: Session, name: str = "Test Organization"):
     organization = models.Organization(name=name)
     db.add(organization)
     db.commit()

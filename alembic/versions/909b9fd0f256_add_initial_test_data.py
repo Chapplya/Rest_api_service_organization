@@ -5,18 +5,19 @@ Revises:
 Create Date: 2025-10-01 00:34:55.668821
 
 """
+
 from typing import Sequence, Union
 from sqlalchemy.orm import Session
 from database.models import Base
 from alembic import op
 from database import models
-from tests import utils 
+from tests import utils
 from database.connection import get_db
 import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '909b9fd0f256'
+revision: str = "909b9fd0f256"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,9 +27,14 @@ def upgrade() -> None:
     """Upgrade schema."""
     bind = op.get_bind()
     session = Session(bind=bind)
-    
-    utils.create_test_organization(session, name="Organization 1",)
-    utils.create_test_building(session, address="Building 1 Address", latitude=1.0, longitude=1.0)
+
+    utils.create_test_organization(
+        session,
+        name="Organization 1",
+    )
+    utils.create_test_building(
+        session, address="Building 1 Address", latitude=1.0, longitude=1.0
+    )
     utils.create_test_activity(session, name="Activity 1")
 
     session.commit()

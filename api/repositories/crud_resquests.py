@@ -74,7 +74,7 @@ class OrganizationRepository(
     def update(
         self, id: int, obj_in: schemas.OrganizationUpdate
     ) -> models.Organization:
-        db_organization = self.get(id)  
+        db_organization = self.get(id)
         for key, value in obj_in.model_dump(exclude_unset=True).items():
             setattr(db_organization, key, value)
         self.db.commit()
@@ -82,7 +82,7 @@ class OrganizationRepository(
         return db_organization
 
     def delete(self, id: int) -> dict:
-        db_organization = self.get(id)  
+        db_organization = self.get(id)
         self.db.delete(db_organization)
         self.db.commit()
         return {"message": "Организация успешно удалена"}
