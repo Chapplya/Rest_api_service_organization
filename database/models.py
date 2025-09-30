@@ -2,13 +2,12 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
-from geoalchemy2 import Geometry  # Для географических координат
+from geoalchemy2 import Geometry
 from sqlalchemy.orm import DeclarativeMeta
 
 Base: DeclarativeMeta = declarative_base()
 
 
-# Ассоциативная таблица для связи организаций и видов деятельности (многие ко многим)
 organization_activity_association = Table(
     "organization_activity",
     Base.metadata,
@@ -84,4 +83,4 @@ class Activity(Base):
 
     @level.setter
     def level(self, level):
-        pass  # Игнорируем установку значения (только для чтения)
+        pass

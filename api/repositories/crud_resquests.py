@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import List, Optional, Generic, TypeVar, Type
 from sqlalchemy.orm import Session
 from database import models, schemas
-from database.models import Base
 from fastapi import HTTPException, status
 
 from sqlalchemy.orm import DeclarativeMeta
@@ -61,8 +60,6 @@ class OrganizationRepository(
         db_organization = models.Organization(
             name=obj_in.name, building_id=obj_in.building_id
         )
-
-        # Добавляем телефонные номера
         for phone_number in obj_in.phone_numbers:
             db_phone_number = models.PhoneNumber(
                 number=phone_number.number, organization=db_organization
@@ -77,7 +74,7 @@ class OrganizationRepository(
     def update(
         self, id: int, obj_in: schemas.OrganizationUpdate
     ) -> models.Organization:
-        db_organization = self.get(id)  # Используем get для проверки существования
+        db_organization = self.get(id)  
         for key, value in obj_in.model_dump(exclude_unset=True).items():
             setattr(db_organization, key, value)
         self.db.commit()
@@ -85,7 +82,7 @@ class OrganizationRepository(
         return db_organization
 
     def delete(self, id: int) -> dict:
-        db_organization = self.get(id)  # Получаем организацию или 404
+        db_organization = self.get(id)  
         self.db.delete(db_organization)
         self.db.commit()
         return {"message": "Организация успешно удалена"}
@@ -108,7 +105,6 @@ class OrganizationRepository(
         return activity.organizations
 
     def search_by_activity(self, activity_name: str) -> List[models.Organization]:
-        # Находим все виды деятельности, чье имя соответствует поисковому запросу (до 3 уровней вложенности)
         activities = (
             self.db.query(models.Activity)
             .filter(models.Activity.name.ilike(f"%{activity_name}%"))
@@ -118,7 +114,6 @@ class OrganizationRepository(
         for activity in activities:
             organizations.update(activity.organizations)
 
-            # Рекурсивно ищем дочерние виды деятельности до 3 уровня вложенности
             def get_child_organizations(parent_activity, level):
                 if level > 3:
                     return
