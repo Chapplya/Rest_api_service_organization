@@ -1,1 +1,11 @@
-# Rest_api_service_organization
+Установка зависимостей
+
+pip install -r requirements.txt
+
+Локальный запуск приложения:
+
+uvicorn main:app --reload
+
+Запуск с помощью docker
+
+docker-compose up

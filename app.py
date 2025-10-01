@@ -1,8 +1,8 @@
 # app/main.py
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from database.models import Base
-from api.security import api_key
-from api.routers import organizations, buildings, activities
+from api import register_routers
+
 from database.connection import engine
 
 Base.metadata.create_all(bind=engine)
@@ -13,23 +13,6 @@ app = FastAPI(
     version="0.1.0",
 )
 
-app.include_router(organizations.router)
-app.include_router(buildings.router)
-app.include_router(activities.router)
+register_routers(app)
 
 
-@app.get("/", tags=["Root"])
-async def read_root():
-    return {"message": "Добро пожаловать в API справочника Организаций!"}
-
-
-# Пример защищенного эндпоинта
-@app.get(
-    "/protected-route",
-    tags=["Protected"],
-    dependencies=[Depends(api_key.verify_api_key)],
-)
-async def get_protected_data():
-    return {
-        "message": "Вы успешно аутентифицированы и получили доступ к защищенным данным."
-    }

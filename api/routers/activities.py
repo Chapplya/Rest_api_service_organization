@@ -17,6 +17,22 @@ router = APIRouter(
 )
 
 
+@router.get("/", tags=["Root"])
+async def read_root():
+    return {"message": "Добро пожаловать в API справочника Организаций!"}
+
+
+@router.get(
+    "/protected-route",
+    tags=["Protected"],
+    dependencies=[Depends(api_key.verify_api_key)],
+)
+async def get_protected_data():
+    return {
+        "message": "Вы успешно аутентифицированы и получили доступ к защищенным данным."
+    }
+
+
 def get_activity_repository(db: Session = Depends(get_db)):
     return crud_resquests.ActivityRepository(db)
 
